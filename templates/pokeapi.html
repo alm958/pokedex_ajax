@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>pokeapi</title>
+        <link rel="stylesheet" type="text/css" href="../static/styles/master.css">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function(){
+                var poke = '';
+                var istring = '';
+                for ( var i = 1; i <= 151; i++){
+                    istring = '<img id="' + i + '" src="http://pokeapi.co/media/img/' + i + '.png">'
+                    poke += istring;
+                }
+                document.getElementById("poke").innerHTML = poke;
+
+                $('#poke').children('img').click(function(){
+                    console.log(this.id);
+                    poke_url = 'http://pokeapi.co/api/v2/pokemon/' + this.id + '/';
+                    console.log(poke_url);
+                    $.ajax({
+                        method: 'get',
+                        url: poke_url,
+                        success: function(clicked_poke){
+                            console.log(clicked_poke);
+                            poke_str = "<h3>" + clicked_poke.name + "</h3>";
+                            poke_str += "<img src='"+ clicked_poke.sprites.front_default + "'>"
+                            poke_str += "<p>Types :</p><p id='types'>"
+                            for (var i = 0; i < clicked_poke.types.length; i++){
+                                poke_str += clicked_poke.types[i].type.name + "<br>";
+                            }
+                            poke_str += "</p><p>Height : " + clicked_poke.height + "</p><p>Weight : " + clicked_poke.weight;
+                            document.getElementById("pokedex").innerHTML = poke_str;
+                        }
+                    })
+                })
+            })
+        </script>
+    </head>
+    <body id="main">
+        <div id="poke"></div>
+        <div id="pokedex"></div>
+
+    </body>
+</html>
